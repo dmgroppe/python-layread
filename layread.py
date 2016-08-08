@@ -10,7 +10,12 @@ def layread(layFileName,datFileName,timeOffset=0,timeLength=-1):
         datFileName - the .dat file name (or path)
         timeOffset - the number of time steps to ignore (so if this was set to 3 for example, the file reader would extract data for time steps 4 to the end)
         timeLength - the number of time steps to read (so if this was set to 5 and timeOffset was set to 3, the file reader would read data for time steps 4,5,6,7,8). If this parameter is set to -1, then the whole .dat file is read.
-    outputs:       
+
+    default values:
+        timeOffset=0 (i.e., start reading that beginning of the file)
+        timeLength=-1 (i.e., read in entire file)
+
+    outputs:
         header - information from .lay file
         record - EEG data from .dat file
     """
