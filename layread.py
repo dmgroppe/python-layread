@@ -8,13 +8,18 @@ from datetime import datetime
 def layread(layFileName,datFileName,timeOffset=0,timeLength=-1):
 	"""
 	inputs:
-		layFileName - the .lay file name (or path)
-		datFileName - the .dat file name (or path)
-		timeOffset - the number of time steps to ignore (so if this was set to 3 for example, the file reader would extract data for time steps 4 to the end)
-		timeLength - the number of time steps to read (so if this was set to 5 and timeOffset was set to 3, the file reader would read data for time steps 4,5,6,7,8). If this parameter is set to -1, then the whole .dat file is read.
-	outputs:   	
-		header - information from .lay file
-		record - EEG data from .dat file
+	    layFileName - the .lay file name (or path)
+	    datFileName - the .dat file name (or path)
+	    timeOffset - the number of time steps to ignore (so if this was set to 3 for example, the file reader would extract data for time steps 4 to the end)
+	    timeLength - the number of time steps to read (so if this was set to 5 and timeOffset was set to 3, the file reader would read data for time steps 4,5,6,7,8). If this parameter is set to -1, then the whole .dat file is read.
+
+	default values:
+	    timeOffset=0 (i.e., start reading that beginning of the file)
+	    timeLength=-1 (i.e., read in entire file)
+
+	outputs:
+	    header - information from .lay file
+	    record - EEG data from .dat file
 	"""
 	
 	# takes ~8 min for a 1.5GB file
@@ -171,10 +176,10 @@ def layread(layFileName,datFileName,timeOffset=0,timeLength=-1):
 	
 	return (header,record)
 
-if __name__ == '__main__':
-	try:
-		layread("\Users\Ian\Documents\Adaptive Stimulation\FileReader\skAnonShort.lay","\Users\Ian\Documents\Adaptive Stimulation\FileReader\skAnonShort.dat") # sample lay and dat files i was using
-	except:
-		type,value,tb = sys.exc_info()
-		traceback.print_exc()
-		pdb.post_mortem(tb)
+# if __name__ == '__main__':
+# 	try:
+# 		layread("\Users\Ian\Documents\Adaptive Stimulation\FileReader\skAnonShort.lay","\Users\Ian\Documents\Adaptive Stimulation\FileReader\skAnonShort.dat") # sample lay and dat files i was using
+# 	except:
+# 		type,value,tb = sys.exc_info()
+# 		traceback.print_exc()
+# 		pdb.post_mortem(tb)
