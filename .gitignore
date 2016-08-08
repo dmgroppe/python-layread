@@ -6,7 +6,12 @@
 *.mat
 *.pyc
 *.asv
+*.xls
+*.xlsx
+*.csv
+*.png
 *.rtf
+*.orig
 
 # specfic files
 test.py
