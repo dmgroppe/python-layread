@@ -21,8 +21,15 @@ def layread(layFileName,datFileName=None,timeOffset=0,timeLength=-1):
         timeLength=-1 (i.e., read in entire file)
 
     outputs:
-        header - information from .lay file
-        record - EEG data from .dat file
+        header - information from .lay file. It contains the following keys:
+            samplingrate: sampling rate in Hz
+            rawheader: a dict of the raw header from the lay file
+            starttime: string indicating the start time of recording (date hours:min:seconds)
+            datafile: full path and filename of dat file
+            annotations: list of event annotations
+            waveformcount: # of channels
+            patient: dict of patient information (mostly empty)
+        record - EEG data from .dat file (channel x time numpy array)
     """
 
     # takes ~8 min for a 1.5GB file
@@ -120,6 +127,7 @@ def layread(layFileName,datFileName=None,timeOffset=0,timeLength=-1):
                 contents[4] = separator.join(contents[4:len(contents)])
             # raw header contains just the original lines
             comments.append(tline.strip())
+            # ?? print(tline.strip())
             samplenum = float(contents[0])*float(fileinfo['samplingrate'])
             # this calcuates sample time
             i = 0
@@ -128,12 +136,13 @@ def layread(layFileName,datFileName=None,timeOffset=0,timeLength=-1):
             samplenum -= sampletimes[i]['sample']
             samplesec = samplenum / float(fileinfo['samplingrate'])
             timesec = samplesec + sampletimes[i]['time']
+            # ?? print("{}=timesec, {}=samplesec {}=samplenum".format(timesec,samplesec,samplenum))
             commenttime = time.strftime('%H:%M:%S',time.gmtime(timesec)) # should be converted to HH:MM:SS
             dn = patient['testdate'] + ',' + str(commenttime)
             dn = time.strptime(dn,'%m/%d/%y,%H:%M:%S')
             dn = datetime.fromtimestamp(mktime(dn))
             dn = dn.strftime('%d-%b-%Y %H:%M:%S') # convert date and time to standard format
-            annotations.append({'time':dn,'duration':float(contents[1]),'text':contents[4]})
+            annotations.append({'time':dn, 'sample': int(np.round(samplenum)),'duration':float(contents[1]),'text':contents[4]})
             # annotations[cnum] = {'time':dn} # previously datetime(dn,'ConvertFrom','datenum')
             # annotations[cnum] = {'duration':float(contents[1])}
             # annotations[cnum] = {'text':contents[4]}

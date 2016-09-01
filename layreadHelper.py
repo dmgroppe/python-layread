@@ -10,6 +10,8 @@ def cleanAnnotations(header):
      Output:
        none
     """
+
+    cleanList=[]
     if len(header['annotations'])==0:
         print('No annotations in header.')
     else:
@@ -26,7 +28,12 @@ def cleanAnnotations(header):
                    'Started Analyzer - CSA']
         print('*** Start Time: {} ***'.format(header['starttime']))
         for anEvent in header['annotations']:
-            if anEvent['text'][:-1] not in ignoreList:
-                print('{}, {}: dur={}'.format(anEvent['text'][:-1],anEvent['time'],anEvent['duration']))
+            anEvent['text']=anEvent['text'][:-1] # get rid of carriage return at end of string
+            if anEvent['text'] not in ignoreList:
+                cleanList.append(anEvent)
+                print('{}, {}: sample={}, dur={}'.format(anEvent['text'],anEvent['time'],
+                                                         anEvent['sample'],anEvent['duration']))
         lastAnnotation=header['annotations'][-1]
         print('*** Last Annotation at: {} ***'.format(lastAnnotation['time']))
+
+    return cleanList
