@@ -81,7 +81,13 @@ def layread(layFileName,datFileName=None,timeOffset=0,timeLength=-1):
     sampletimes = [] # list of dictionaries
     for row in data:
         if row[0] == 'sampletimes':
+            print("sample: {}, time: {}".format(float(row[2]),float(row[3])))
             sampletimes.append({'sample':float(row[2]),'time':float(row[3])})
+    # Persyst appears to periodically resync the time-sample mapping. sampletimes tells you when those happen.
+    # For example, in a short demo files with 256 Hz sampling I get
+    # sample: 0.0, time: 34273.799
+    # sample: 454540.0, time: 36049.344
+    # sample: 907040.0, time: 37816.922
 
     # channelmap
     channelmap = [] # list of strings
@@ -126,23 +132,25 @@ def layread(layFileName,datFileName=None,timeOffset=0,timeLength=-1):
                 separator = ','
                 contents[4] = separator.join(contents[4:len(contents)])
             # raw header contains just the original lines
-            comments.append(tline.strip())
-            # ?? print(tline.strip())
-            samplenum = float(contents[0])*float(fileinfo['samplingrate'])
-            # this calcuates sample time
+            comments.append(tline.strip()) # These lines look something like this:
+            # 127.182,0.000,0,100,XLSpike
+            # This first element (in this case 127.182) indicates the time in seconds from the start of the file at which
+            # the event occurred
+            samplenum = float(contents[0])*float(fileinfo['samplingrate']) # convert onset from seconds to samples
+            samplenumRaw=samplenum
             i = 0
             while i < len(sampletimes)-1 and samplenum > sampletimes[i+1]['sample']:
+                # i tells you which sample-synchronization point to use in order to map from samples to time
                 i=i+1
             samplenum -= sampletimes[i]['sample']
             samplesec = samplenum / float(fileinfo['samplingrate'])
             timesec = samplesec + sampletimes[i]['time']
-            # ?? print("{}=timesec, {}=samplesec {}=samplenum".format(timesec,samplesec,samplenum))
             commenttime = time.strftime('%H:%M:%S',time.gmtime(timesec)) # should be converted to HH:MM:SS
             dn = patient['testdate'] + ',' + str(commenttime)
             dn = time.strptime(dn,'%m/%d/%y,%H:%M:%S')
             dn = datetime.fromtimestamp(mktime(dn))
             dn = dn.strftime('%d-%b-%Y %H:%M:%S') # convert date and time to standard format
-            annotations.append({'time':dn, 'sample': int(np.round(samplenum)),'duration':float(contents[1]),'text':contents[4]})
+            annotations.append({'time':dn, 'sample': int(np.round(samplenumRaw)),'duration':float(contents[1]),'text':contents[4]})
             # annotations[cnum] = {'time':dn} # previously datetime(dn,'ConvertFrom','datenum')
             # annotations[cnum] = {'duration':float(contents[1])}
             # annotations[cnum] = {'text':contents[4]}

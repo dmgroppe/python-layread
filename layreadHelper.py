@@ -16,16 +16,16 @@ def cleanAnnotations(header):
         print('No annotations in header.')
     else:
         ignoreList=['XLEvent',
-                   'XLSpike',
-                   'Video Recording OFF',
-                   'Video Recording ON',
-                   'Stop Recording',
-                   'Start Recording',
-                   'Recording Analyzer - XLSpike - Intracranial',
-                   'Recording Analyzer - XLEvent - Intracranial',
-                   'Recording Analyzer - CSA',
-                   'Started Analyzer - XLSpike - Intracranial',
-                   'Started Analyzer - CSA']
+                    'XLSpike',
+                    'Video Recording ON',
+                    'Video Recording OFF',
+                    'Stop Recording',
+                    'Start Recording',
+                    'Recording Analyzer - XLSpike - Intracranial',
+                    'Recording Analyzer - XLEvent - Intracranial',
+                    'Recording Analyzer - CSA',
+                    'Started Analyzer - XLSpike - Intracranial',
+                    'Started Analyzer - CSA']
         print('*** Start Time: {} ***'.format(header['starttime']))
         for anEvent in header['annotations']:
             anEvent['text']=anEvent['text'][:-1] # get rid of carriage return at end of string
