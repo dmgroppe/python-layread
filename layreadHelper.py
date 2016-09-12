@@ -21,6 +21,7 @@ def cleanAnnotations(header):
                     'Video Recording OFF',
                     'Stop Recording',
                     'Start Recording',
+                    'Recording Analyzer - ECG',
                     'Recording Analyzer - XLSpike - Intracranial',
                     'Recording Analyzer - XLEvent - Intracranial',
                     'Recording Analyzer - CSA',

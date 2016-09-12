@@ -81,7 +81,7 @@ def layread(layFileName,datFileName=None,timeOffset=0,timeLength=-1):
     sampletimes = [] # list of dictionaries
     for row in data:
         if row[0] == 'sampletimes':
-            print("sample: {}, time: {}".format(float(row[2]),float(row[3])))
+            #print("sample: {}, time: {}".format(float(row[2]),float(row[3])))
             sampletimes.append({'sample':float(row[2]),'time':float(row[3])})
     # Persyst appears to periodically resync the time-sample mapping. sampletimes tells you when those happen.
     # For example, in a short demo files with 256 Hz sampling I get
