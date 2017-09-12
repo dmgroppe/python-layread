@@ -1,2 +1,2 @@
 # python-layread
-Reads lay-dat file pair data into nested dictionary and numpy array for processing in Python. 
+Reads EEG data stored in Persyt's format (i.e., a lay-dat file pair) into nested dictionary and numpy array for processing in Python. 
